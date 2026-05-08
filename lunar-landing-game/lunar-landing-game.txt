@@ -1,0 +1,18 @@
+Lunar Landing Game
+https://en.wikipedia.org/wiki/Lunar_Lander_%28video_game_genre%29
+
+This game simulates landing a spacecraft on the lunar surface. When you take the controls, the spacecraft is at an altitude of 2350 feet and is approaching the moon at 470 feet/sec.
+The object of the game is to make a perfect landing; that is, land on the surface (0 altitude) at a velocity of zero. To accomplish the landing you have 600 pounds of fuel which may be burned in increments of 0 to 75 pounds. Each burn has a time interval of 1 second, and each pound of fuel burned provides an acceleration of 1 feet/sec^2 away from the surface. Gravitation of the moon is assumed to be -5feet/sec^2; therefore, a 5-pound burn just counteracts gravity and results in a constant velocity.
+When the amount of fuel to be burned (0-75 pounds) is entered, the program calculates your new altitude and velocity from:
+x[n]=x[n-1]+V[n-1].t+(A[n]+G).t^2/2
+V[n]=V[n-1]+(A[n]+G).t
+Where t=1 second
+G=-5feet/sec^2 (gravity)
+A[n]=pounds of fuel burned
+x[n]=altitude after the burn
+x[n-1]=altitude before the burn
+V[n]=velocity after the burn
+V[n-1]=velocity before the burn
+To allow thinking time for untrained astronauts, the amount of fuel to be burned must be entered for each 1-second interval until you reach the surface. A perfect landing is 0 velocity and 0 altitude. Otherwise you crash at a certain velocity.
+If you enter more than 75 pounds, only 75 will be burned. If the burn you enter exceeds the fuel supply, the remaining fuel will be burned and the spacecraft will free fall from the altitude to which you have ascended. In such a case, your terminal free fall (crash) velocity is calculated by:
+Vff=-SQRT(V[n]^2+2.G.X[n])
