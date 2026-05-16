@@ -1,68 +1,62 @@
 ================================================================================
-INSTALLATION REPORT 
-This report describes the installation process for the Interactive Voice Response (IVR) system developed for the Network Architecture and Management course. The project is based on an Asterisk PBX system to manage voice calls via SIP.
+INSTALLATION REPORT - VOIP IVR PROJECT 
 
-1. PREREQUISITES
-Asterisk PBX must be installed and running on a Linux environment (e.g., Linux Mint).
-SIP softphones (e.g., Linphone) should be configured and registered.
-Python 3 must be installed on the system to execute AGI scripts.
+PREREQUISITES:
+Asterisk PBX must be installed and running on the system.
+SIP softphones (Linphone) should be configured and registered.
+Python 3 must be installed on the system to execute the AGI scripts.
 
-2. REQUIRED LIBRARIES
-The AGI scripts require specific Python libraries to handle web scraping for real-time data. These must be installed to ensure the Euromilhões and external features work correctly:
+REQUIRED LIBRARIES:
 
-requests: Used to fetch data from external web pages.
+The AGI scripts require specific Python libraries to handle web scraping for real-time data (e.g., Euromilhões results). Python must be able to use:
 
-beautifulsoup4 (bs4): Used to parse HTML content.
+import requests
 
-Installation command:
+from bs4 import BeautifulSoup
+
+To install these required dependencies, run the following command in your terminal:
 sudo pip3 install requests beautifulsoup4
 
-3. CONFIGURATION FILES INSTALLATION
-To set up the users (SIP) and the call logic (Dialplan), you must replace the default Asterisk configuration files with the ones provided in the ZIP file.
+CONFIGURATION FILES INSTALLATION:
+
+To configure the SIP users and dialplan logic, you must replace the default Asterisk configuration files with the pre-configured ones provided in the ZIP package.
 
 Files: sip.conf and extensions.conf
 
-Path: /etc/asterisk/
+Target Path: /etc/asterisk/
 
-Permissions: These files must be owned by the asterisk user.
+Permissions: Must be owned by the asterisk user.
 
-Commands:
-sudo mv sip.conf extensions.conf /etc/asterisk/
+Run these commands:
+sudo cp sip.conf extensions.conf /etc/asterisk/
 sudo chown asterisk:asterisk /etc/asterisk/sip.conf /etc/asterisk/extensions.conf
 
-4. AUDIO FILES INSTALLATION
-The custom audio files provided are essential for the menu prompts and game feedback (e.g., Lunar Landing status).
 
-Action: All .gsm files included in the delivery must be moved to the default Asterisk sounds directory.
+AUDIO FILES INSTALLATION:
 
-Path: /usr/share/asterisk/sounds/
-Permissions: Grant ownership to the asterisk user.
+The custom audio prompts (*.gsm files) used for the menus and game updates must be moved to the directory defined by the PROJECT_AUDIO_DIR global variable.
 
-Commands:
-sudo mv *.gsm /usr/share/asterisk/sounds/
-sudo chown asterisk:asterisk /usr/share/asterisk/sounds/*.gsm
+Target Path: /home/mint/sound
 
-5. AGI SCRIPTS INSTALLATION
-The logic for the Lunar Landing game, statistics, and Euromilhões scraping is contained within Python AGI scripts.
+Permissions: Grant ownership to the asterisk user so the PBX can read the files.
 
-Scripts: euromilhoes_agi.py, lunar_game.py, and lunar_stats.py.
-Path: /usr/share/asterisk/agi-bin/
+Run these commands:
+sudo mkdir -p /home/mint/sound (if the directory doesnt already exist)
+sudo cp *.gsm /home/mint/sound/
+sudo chown asterisk:asterisk /home/mint/sound/*.gsm
 
-Permissions: The scripts must be owned by the asterisk user and be marked as executable.
+AGI SCRIPTS INSTALLATION:
 
-Commands:
-sudo mv euromilhoes_agi.py lunar_game.py lunar_stats.py /usr/share/asterisk/agi-bin/
-sudo chown asterisk:asterisk /usr/share/asterisk/agi-bin/*.py
-sudo chmod +x /usr/share/asterisk/agi-bin/*.py
+The Python AGI scripts handling the core logic of the system must be moved to the directory defined by the PROJECT_AGI_DIR global variable.
 
-6. APPLYING CHANGES AND VERIFICATION
-After moving all files, you must reload Asterisk to apply the new configurations:
+Scripts: euromilhoes_agi.py, lunar_game.py, and lunar_stats.py
 
-Open the Asterisk console: sudo asterisk -r
+Target Path: /home/mint/scripts
 
-Reload SIP: sip reload
+Permissions: Scripts must be owned by the asterisk user and marked as executable.
 
-Reload Dialplan: dialplan reload
-
-================================================================================
-END OF REPORT
+Run these commands:
+sudo mkdir -p /home/mint/scripts (if the directory doesnt already exist)
+sudo cp euromilhoes_agi.py lunar_game.py lunar_stats.py /home/mint/scripts/
+sudo chown asterisk:asterisk /home/mint/scripts/*.py
+sudo chmod +x /home/mint/scripts/*.py
